@@ -101,7 +101,7 @@
                     url: 'https://api.particle.io/v1/access_tokens/current',
                 });
             });
-            $('#ledOnButton').on('click', function (e) {
+            $('#toggleDoorButton').on('click', function (e) {
                 e.preventDefault();
                 doorControl('on');
             });
@@ -150,9 +150,9 @@
             $('#userSpan').text(sessionStorage.particleUser);
 
             deviceList.forEach(function (dev) {
-                // For each device in the user's account, see if the device supports the "led" function call
+                // For each device in the user's account, see if the device supports the "toggleDoor" function call
                 // Also note whether it's online or not.
-                if (dev.functions.includes('led')) {
+                if (dev.functions.includes('toggleDoor')) {
                     html += '<option value="' + dev.id + '">' + dev.name + (dev.online ? '' : ' (offline)') + '</option>';
                 }
             });
@@ -189,7 +189,7 @@
         <h3>Control an LED!</h3>
         <form>
             <p>Device: <select id="deviceSelect"></select></p>
-            <p><button id="ledOnButton">LED On</button>&nbsp;<button id="ledOffButton">LED Off</button></p>
+            <p><button id="toggleDoorButton">Toggle Door</button></p>
             <p>&nbsp;</p>
             <p><span id="statusSpan"></span></p>
             <p>&nbsp;</p>
