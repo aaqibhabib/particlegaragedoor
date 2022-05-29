@@ -18,7 +18,7 @@
                 // Hide the login page so the button goes away
                 $('#loginDiv').css('display', 'none');
                 $('#loginFailedDiv').css('display', 'none');
-                sessionStorage.particleUser = $('#userInput').val();
+                localStorage.particleUser = $('#userInput').val();
 
                 // Attempt to log into the Particle cloud
                 $.ajax({
@@ -82,9 +82,9 @@
                 e.preventDefault();
 
                 // Delete the access token from local session storage
-                const accessToken = sessionStorage.particleToken;
-                delete sessionStorage.particleToken;
-                delete sessionStorage.particleUser;
+                const accessToken = localStorage.particleToken;
+                delete localStorage.particleToken;
+                delete localStorage.particleUser;
 
                 // Invalidate the token on the cloud side
                 $.ajax({
@@ -110,7 +110,7 @@
                 doorControl('off');
             });
 
-            if (sessionStorage.particleToken) {
+            if (localStorage.particleToken) {
                 // We have a Particle access token in the session storage. Probably
                 // refreshed the page, so try to use it. You don't need to log in
                 // every time, you can reuse the access token if it has not expired.
@@ -120,13 +120,13 @@
         });
 
         function loginSuccess(token) {
-            sessionStorage.particleToken = token;
+            localStorage.particleToken = token;
             getDevices();
         }
 
         function getDevices() {
             // Request the device list from the cloud
-            particle.listDevices({ auth: sessionStorage.particleToken }).then(
+            particle.listDevices({ auth: localStorage.particleToken }).then(
                 function (data) {
                     // Success! Show the main page
                     $('#mainDiv').css('display', 'inline');
@@ -147,7 +147,7 @@
         function loadDeviceList(deviceList) {
             let html = '';
 
-            $('#userSpan').text(sessionStorage.particleUser);
+            $('#userSpan').text(localStorage.particleUser);
 
             deviceList.forEach(function (dev) {
                 // For each device in the user's account, see if the device supports the "toggleDoor" function call
@@ -172,7 +172,7 @@
 
             $('#statusSpan').text('');
 
-            particle.callFunction({ deviceId, name: 'toggleDoor', argument: cmd, auth: sessionStorage.particleToken }).then(
+            particle.callFunction({ deviceId, name: 'toggleDoor', argument: cmd, auth: localStorage.particleToken }).then(
                 function (data) {
                     $('#statusSpan').text('Call completed');
                 },
